@@ -13,15 +13,14 @@ class BookController implements ApplicationContextAware  {
 	}    
 	def shoppingCartFlow = {   
 		getBooks {
-			action { 
-
+			action {
 				[ bookList:Book.list() ]
 			}   
 			on("success").to "showCatalogue"
 			on(Exception).to "handleError"
 		}
 		showCatalogue { 
-			on("chooseBook") { 
+			on("chooseBook") {
 				if(!params.id)return error()
 				def items = flow.cartItems
 				if(!items) items = [] as HashSet
@@ -72,7 +71,10 @@ class BookController implements ApplicationContextAware  {
 				def o = new Order(person:p, shippingAddress:a, paymentDetails:pd)
 				o.invoiceNumber = new Random().nextInt(9999999)								
 				cartItems.each { o.addToItems(it) }
-				[order:o]
+
+                notificationService.notifyPurchase(o)
+
+                [order:o]
 			}   
 			on("error").to "confirmPurchase"
 			on(Exception).to "confirmPurchase"

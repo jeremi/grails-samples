@@ -2,7 +2,7 @@
 log4j {
     appender.stdout = "org.apache.log4j.ConsoleAppender"
     appender."stdout.layout"="org.apache.log4j.PatternLayout"        
-    rootLogger="info,stdout"
+    rootLogger="ALL,stdout"
     logger {
 		grails.spring="info,stdout"            
 		org.codehaus.groovy.grails.web="info,stdout"
